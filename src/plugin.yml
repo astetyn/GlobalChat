@@ -1,0 +1,5 @@
+name: GlobalChat
+main: main.Main
+author: astetyne
+depend: [LuckPerms]
+version: 2.2
