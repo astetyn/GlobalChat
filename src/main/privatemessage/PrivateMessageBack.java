@@ -1,17 +1,17 @@
 package main.privatemessage;
 
 import main.ChatPrefabrics;
-import main.playerdata.PlayerData;
+import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class PrivateMessageBack {
 	
-	PlayerData pd;
+	GPlayer pd;
 	String[] args;
 	
-	public PrivateMessageBack(PlayerData pd, String[] args) {
+	public PrivateMessageBack(GPlayer pd, String[] args) {
 		this.pd = pd;
 		this.args = args;
 	}

@@ -21,7 +21,8 @@ import main.config.GlobalChatConfiguration;
 import main.eventinvitation.EventJoinCommand;
 import main.message.GlobalMessage;
 import main.playerdata.LoaderRunnable;
-import main.playerdata.PlayerData;
+import main.playerdata.LuckPermsManager;
+import main.playerdata.GPlayer;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
@@ -40,7 +41,7 @@ import net.md_5.bungee.event.EventPriority;
 public class Main extends Plugin implements Listener {
 	
 	public static final Logger LOG = BungeeCord.getInstance().getLogger();
-	public static List<PlayerData> playerDataList = new ArrayList<PlayerData>();
+	public static List<GPlayer> gPlayers = new ArrayList<GPlayer>();
 	public static GlobalChatConfiguration config;
 	public static Plugin plugin;
 	
@@ -79,6 +80,15 @@ public class Main extends Plugin implements Listener {
         getProxy().getPluginManager().registerCommand(this, new NickCommand());
         
     }
+	
+	@Override
+	public void onDisable() {
+		
+		for(GPlayer gp : gPlayers) {
+			LuckPermsManager.saveAllDataFromPlayer(gp);
+		}
+		
+	}
 
 	@EventHandler
 	public void onChat(ChatEvent e) {
@@ -98,7 +108,7 @@ public class Main extends Plugin implements Listener {
 		}
 		
 		ProxiedPlayer pp = (ProxiedPlayer) e.getSender();
-		PlayerData pd = getPlayerData(pp);
+		GPlayer pd = getPlayerData(pp);
 		
 		GlobalMessage gs = new GlobalMessage(pd, line);
 		gs.wantsToSendMessage();
@@ -106,11 +116,11 @@ public class Main extends Plugin implements Listener {
 		e.setCancelled(true);
 	}
 	
-	public static PlayerData getPlayerData(ProxiedPlayer pp) {
+	public static GPlayer getPlayerData(ProxiedPlayer pp) {
 		
-		for(PlayerData pd : playerDataList) {
-			if(pd.getProxiedPlayer().equals(pp)) {
-				return pd;
+		for(GPlayer gp : gPlayers) {
+			if(gp.getProxiedPlayer().equals(pp)) {
+				return gp;
 			}
 		}
 		return null;
@@ -119,8 +129,8 @@ public class Main extends Plugin implements Listener {
 	@EventHandler
 	public void onPostJoin(PostLoginEvent e) {
 		
-		PlayerData pd = new PlayerData(e.getPlayer());
-		playerDataList.add(pd);
+		GPlayer gPlayer = new GPlayer(e.getPlayer());
+		gPlayers.add(gPlayer);
 		
 		BungeeCord.getInstance().getScheduler().schedule(this,  new Runnable() {
 	        @Override
@@ -128,16 +138,15 @@ public class Main extends Plugin implements Listener {
 	        	if(!e.getPlayer().isConnected()) {
 	        		return;
 	        	}
-	        	pd.setJoinedServer(true);
-	        	pd.syncPrefix();
-	        	pd.syncMetaValues();
+	        	gPlayer.setJoinedServer(true);
+	        	LuckPermsManager.loadAllDataToPlayer(gPlayer);
         		
         		for(ProxiedPlayer p : ProxyServer.getInstance().getPlayers()){
         			p.sendMessage(TextComponent.fromLegacyText(ChatColor.DARK_GRAY+"["+ChatColor.GRAY+"WoF"+ChatColor.DARK_GRAY+"] "+ChatColor.WHITE+e.getPlayer().getName()+ChatColor.GRAY+" sa pripojil/a do hry!"));
         		}
 
-        		PluginDescription pdf = plugin.getDescription();
-	        	String version = pdf.getVersion();
+        		PluginDescription pd = plugin.getDescription();
+	        	String version = pd.getVersion();
         		TextComponent globalChatVersionInfo = new TextComponent();
         		globalChatVersionInfo.addExtra(ChatColor.GRAY+"-----------------------------------------\n");
         		globalChatVersionInfo.addExtra(ChatColor.GREEN+"            Running "+ChatColor.WHITE+"GlobalChat "+ChatColor.GREEN+ChatColor.BOLD+version+"\n");
@@ -150,18 +159,20 @@ public class Main extends Plugin implements Listener {
 	@EventHandler
 	public void onLeave(PlayerDisconnectEvent e) {
 
-		PlayerData pd = getPlayerData(e.getPlayer());
-		pd.saveMetaValues();
-		playerDataList.remove(pd);
+		GPlayer gPlayer = getPlayerData(e.getPlayer());
+		gPlayers.remove(gPlayer);
 		
-		if(pd.isJoinedServer()) {
-			for(ProxiedPlayer p : ProxyServer.getInstance().getPlayers()){
-		         p.sendMessage(TextComponent.fromLegacyText(ChatColor.DARK_GRAY+"["+ChatColor.GRAY+"WoF"+ChatColor.DARK_GRAY+"] "+ChatColor.WHITE+e.getPlayer()+ChatColor.GRAY+" sa odpojil/a z hry."));
-		    }
+		if(!gPlayer.isJoinedServer()) {
+			return;
 		}
+		
+		for(ProxiedPlayer p : ProxyServer.getInstance().getPlayers()){
+	         p.sendMessage(TextComponent.fromLegacyText(ChatColor.DARK_GRAY+"["+ChatColor.GRAY+"WoF"+ChatColor.DARK_GRAY+"] "+ChatColor.WHITE+e.getPlayer()+ChatColor.GRAY+" sa odpojil/a z hry."));
+	    }
+		LuckPermsManager.saveAllDataFromPlayer(gPlayer);
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOWEST)
     public void onTabComplete(TabCompleteEvent e) {
 		
         String[] args = e.getCursor().split(" ");

@@ -2,7 +2,7 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
-import main.playerdata.PlayerData;
+import main.playerdata.GPlayer;
 import main.privatemessage.PrivateMessage;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -25,7 +25,7 @@ public class PrivateMessageCommand extends Command {
 		}
 		
 		ProxiedPlayer pp = (ProxiedPlayer) commandSender;
-		PlayerData pd = Main.getPlayerData(pp);
+		GPlayer pd = Main.getPlayerData(pp);
 		
 		if(pd.isMuted()) {
 			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "You are silenced. Your message will not be shown."));

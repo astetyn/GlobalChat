@@ -7,8 +7,8 @@ public class LoaderRunnable implements Runnable {
 	@Override
 	public void run() {
 		
-		for(PlayerData pd : Main.playerDataList) {
-			pd.syncPrefix();
+		for(GPlayer gPlayer : Main.gPlayers) {
+			LuckPermsManager.syncPrefix(gPlayer);
 		}
 		
 	}

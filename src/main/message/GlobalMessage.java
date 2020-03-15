@@ -5,7 +5,7 @@ import java.util.List;
 
 import main.ChatPrefabrics;
 import main.Main;
-import main.playerdata.PlayerData;
+import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -16,13 +16,13 @@ public class GlobalMessage {
 	private final double MESSAGE_DELAY_SECONDS = 2;
 	
 	private ProxiedPlayer sender;
-	private PlayerData pd;
+	private GPlayer pd;
 	private String message;
 	private String prefix;
 	private Server server;
 	private String nickname;
 	
-	public GlobalMessage(PlayerData pd, String message) {
+	public GlobalMessage(GPlayer pd, String message) {
 		this.sender = pd.getProxiedPlayer();
 		this.message = message;
 		this.pd = pd;
@@ -40,7 +40,7 @@ public class GlobalMessage {
 		}
 		
 		if(pd.hasActivedAdminChat()) {
-			for(PlayerData pdd : Main.playerDataList) {
+			for(GPlayer pdd : Main.gPlayers) {
 				if(pdd.getProxiedPlayer().hasPermission("globalchat.adminchat")) {
 					ProxiedPlayer admin = pdd.getProxiedPlayer();
 					message = ChatColor.translateAlternateColorCodes('&', message);
@@ -86,7 +86,7 @@ public class GlobalMessage {
 	
 		Main.LOG.info(sender.getName()+ " > "+ message);
 		
-		for(PlayerData pdd : Main.playerDataList) {
+		for(GPlayer pdd : Main.gPlayers) {
 			
 			ProxiedPlayer pp = pdd.getProxiedPlayer();
 			

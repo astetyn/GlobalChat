@@ -1,10 +1,8 @@
 package main.commands;
 
-import java.util.TimerTask;
-
 import main.ChatPrefabrics;
 import main.Main;
-import main.playerdata.PlayerData;
+import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -42,23 +40,20 @@ public class UnmuteCommand extends Command {
 			return;
 		}
 		
-		PlayerData tempUnmutedPlayerData = null;
+		GPlayer tempUnmutedPlayerData = null;
 		
-		for(PlayerData pdd : Main.playerDataList) {
+		for(GPlayer pdd : Main.gPlayers) {
 			if(pdd.getProxiedPlayer().getName().equals(playerName)) {
 				tempUnmutedPlayerData = pdd;
 			}
 		}
 		
-		final PlayerData unmutedPlayerData = tempUnmutedPlayerData;
+		final GPlayer unmutedPlayerData = tempUnmutedPlayerData;
 		
 		if(unmutedPlayerData.isMuted()) {
 	
 			unmutedPlayerData.setMuted(false);
-			TimerTask ts = unmutedPlayerData.getTempMuteTask();
-			if(ts!=null) {
-				ts.cancel();
-			}
+
 			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "Player was unsilenced. His messages will be shown now."));
 			unmutedPlayerData.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE +
 					ChatColor.GRAY + "You have been unsilenced. Your messages will be shown now."));

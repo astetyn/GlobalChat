@@ -2,7 +2,7 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
-import main.playerdata.PlayerData;
+import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -24,7 +24,7 @@ public class AdminChatCommand extends Command {
 		}
 		
 		ProxiedPlayer pp = (ProxiedPlayer) commandSender;
-		PlayerData pd = Main.getPlayerData(pp);
+		GPlayer pd = Main.getPlayerData(pp);
 		
 		int tokenCount = args.length;
 		
@@ -42,7 +42,7 @@ public class AdminChatCommand extends Command {
 			for(int i = 0;i<tokenCount;i++) {
 				message += args[i]+" ";
 			}
-			for(PlayerData pdd : Main.playerDataList) {
+			for(GPlayer pdd : Main.gPlayers) {
 				ProxiedPlayer admin = pdd.getProxiedPlayer();
 				if(pdd.getProxiedPlayer().hasPermission("globalchat.adminchat")) {
 					admin.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.ADMIN_CHAT + ChatColor.GRAY + pp.getName() + "> " + ChatColor.RED + message));

@@ -1,11 +1,8 @@
 package main.commands;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import main.ChatPrefabrics;
 import main.Main;
-import main.playerdata.PlayerData;
+import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -32,7 +29,7 @@ public class MuteCommand extends Command {
 		int tokenCount = args.length;
 		
 		if(tokenCount==0||tokenCount>2) {
-			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.WARNING + ChatColor.RED + "/mute <nick> [duration in secs]"));
+			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.WARNING + ChatColor.RED + "/mute <nick>"));
 		}else if(tokenCount==1) {
 	
 			String playerName = args[0];
@@ -43,7 +40,7 @@ public class MuteCommand extends Command {
 			}
 			
 			ProxiedPlayer pp2 = ProxyServer.getInstance().getPlayer(playerName);
-			PlayerData mutedPlayerData = Main.getPlayerData(pp2);
+			GPlayer mutedPlayerData = Main.getPlayerData(pp2);
 			
 			if(mutedPlayerData.isMuted()) {
 				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.WARNING + ChatColor.GRAY + "Player is already muted. For unmute type /unmute <nick>"));
@@ -57,59 +54,6 @@ public class MuteCommand extends Command {
 			
 			Main.LOG.info("User "+pp.getName()+ " muted user "+playerName);
 			
-		}else if(tokenCount==2) {
-			
-			String playerName = args[0];
-			
-			if(ProxyServer.getInstance().getPlayer(playerName)==null) {
-				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.PLAYER_NOT_ONLINE));
-				return;
-			}
-			
-			PlayerData tempMutedPlayerData = null;
-			
-			for(PlayerData pdd : Main.playerDataList) {
-				if(pdd.getProxiedPlayer().getName().equals(playerName)) {
-					tempMutedPlayerData = pdd;
-				}
-			}
-			
-			final PlayerData mutedPlayerData = tempMutedPlayerData;
-			
-			String timeStr = args[1];
-			if(!isNumeric(timeStr)) {
-				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.WARNING + ChatColor.RED + "/mute <nick> [duration in secs]"));
-				return;
-			}
-			double time = Double.parseDouble(timeStr);
-			
-			if(mutedPlayerData.isMuted()) {
-				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.WARNING + ChatColor.GRAY + "Player is already muted. For unmute type /unmute <nick>"));
-				return;
-			}
-			
-			mutedPlayerData.setMuteTimestamp(System.currentTimeMillis());
-			mutedPlayerData.setMuteDuration(time);
-			mutedPlayerData.setMuted(true);
-			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "Player was silenced for "+time+" seconds."));
-			mutedPlayerData.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE +
-					ChatColor.GRAY + "You have been silenced for "+time+" seconds. Your messages will not be shown."));
-
-			Main.LOG.info("User "+pp.getName()+ " muted user "+playerName+" for "+time+" seconds.");
-			
-			Timer timer = new Timer();
-			TimerTask ts = new TimerTask() {
-
-				@Override
-				public void run() {
-					mutedPlayerData.setMuted(false);
-					mutedPlayerData.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE +
-							ChatColor.GRAY + "You are unsilenced now. Silence time passed."));
-					Main.LOG.info("User "+playerName+" unmuted due to time reach.");
-				}
-			};
-			timer.schedule(ts, (int)(time*1000));
-			mutedPlayerData.setTempMuteTask(ts);
 		}
 	}
 	

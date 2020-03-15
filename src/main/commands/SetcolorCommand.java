@@ -2,8 +2,7 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
-import main.playerdata.MetaLoader;
-import main.playerdata.PlayerData;
+import main.playerdata.GPlayer;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -27,7 +26,7 @@ public class SetcolorCommand extends Command {
 		}
 		
 		ProxiedPlayer pp = (ProxiedPlayer) commandSender;
-		PlayerData pd = Main.getPlayerData(pp);
+		GPlayer pd = Main.getPlayerData(pp);
 		
 		int tokenCount = args.length;
 		
@@ -50,8 +49,6 @@ public class SetcolorCommand extends Command {
 			}
 			
 			pd.setColorIndex(index);
-			MetaLoader ml = new MetaLoader(pp);
-			ml.saveMeta("globalchat-color", index+"");
 			
 			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.COLOR + ChatColor.GREEN + "Color successfuly changed to: "
 			+ChatColor.getByChar(index)+"this."));
@@ -85,11 +82,9 @@ public class SetcolorCommand extends Command {
 				return;
 			}
 			
-			for(PlayerData pdd : Main.playerDataList) {
+			for(GPlayer pdd : Main.gPlayers) {
 				if(pdd.getProxiedPlayer().equals(BungeeCord.getInstance().getPlayer(name))) {
 					pdd.setColorIndex(index);
-					MetaLoader ml = new MetaLoader(pdd.getProxiedPlayer());
-					ml.saveMeta("globalchat-color", index+"");
 					pdd.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.COLOR + ChatColor.GREEN + "Color successfuly changed to: "
 							+ChatColor.getByChar(index)+"this " + ChatColor.GREEN + "from player "+ChatColor.YELLOW+pp.getName()));
 					break;

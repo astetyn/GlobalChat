@@ -38,9 +38,9 @@ public class GlobalChatConfiguration {
         if (!file.exists()) {
             file.createNewFile();
             try (InputStream is = plugin.getResourceAsStream("config.yml");
-                    OutputStream os = new FileOutputStream(file)) {
-            		ByteStreams.copy(is, os);
-               		}
+            OutputStream os = new FileOutputStream(file)) {
+    			ByteStreams.copy(is, os);
+       		}
         }
 		config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
 	}

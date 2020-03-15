@@ -2,7 +2,7 @@ package main.privatemessage;
 
 import main.ChatPrefabrics;
 import main.Main;
-import main.playerdata.PlayerData;
+import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -10,11 +10,11 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class PrivateMessage {
 	
-	PlayerData pd;
+	GPlayer pd;
 	String receiverName;
 	String message;
 	
-	public PrivateMessage(PlayerData pd, String receiver, String[] args) {
+	public PrivateMessage(GPlayer pd, String receiver, String[] args) {
 		this.pd = pd;
 		this.receiverName = receiver;
 		String msg = "";
@@ -34,7 +34,7 @@ public class PrivateMessage {
 		}
 		
 		ProxiedPlayer receiver = ProxyServer.getInstance().getPlayer(receiverName);
-		PlayerData receiverData = Main.getPlayerData(receiver);
+		GPlayer receiverData = Main.getPlayerData(receiver);
 		
 		for(String ignoreName : receiverData.getIgnoredPlayersNames()) {
 			if(ignoreName.equals(sender.getName())) {
@@ -45,7 +45,7 @@ public class PrivateMessage {
 		sendMessage(pd, receiverData, message);
 	}
 	
-	private void sendMessage(PlayerData senderData, PlayerData receiverData, String msg) {
+	private void sendMessage(GPlayer senderData, GPlayer receiverData, String msg) {
 		
 		senderData.setLastPrivateMsgReceiverName(receiverData.getProxiedPlayer().getName());
 		receiverData.setLastPrivateMsgReceiverName(senderData.getProxiedPlayer().getName());
@@ -59,7 +59,7 @@ public class PrivateMessage {
 		sender.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.PRIVATE_MESSAGE + ChatColor.GRAY + "me" + ChatColor.GOLD + " > "
 		+ ChatColor.GRAY + receiver.getName() + " > " + ChatColor.WHITE + msg));
 		
-		for(PlayerData pd : Main.playerDataList) {
+		for(GPlayer pd : Main.gPlayers) {
 			if(pd.hasSocialSpy()) {
 				if(!pd.equals(senderData)&&!pd.equals(receiverData)) {
 					pd.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SOCIAL_SPY + ChatColor.GRAY + sender.getName() + ChatColor.GOLD + " > "

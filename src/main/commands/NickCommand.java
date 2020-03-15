@@ -2,8 +2,8 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
-import main.playerdata.MetaLoader;
-import main.playerdata.PlayerData;
+import main.playerdata.LuckPermsManager;
+import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -26,7 +26,7 @@ public class NickCommand extends Command {
 		}
 		
 		ProxiedPlayer pp = (ProxiedPlayer) commandSender;
-		PlayerData pd = Main.getPlayerData(pp);
+		GPlayer pd = Main.getPlayerData(pp);
 		
 		int tokenCount = args.length;
 		
@@ -38,13 +38,9 @@ public class NickCommand extends Command {
 			if(nickname.equals("delete")) {
 				pd.setCustomNick(null);
 				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.NICKNAME + ChatColor.GRAY + "Nick deleted successfuly."));
-				MetaLoader ml = new MetaLoader(pd.getProxiedPlayer());
-				ml.removeOwnMeta("globalchat-nick");
 			}else {
 				pd.setCustomNick(nickname);
 				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.NICKNAME + ChatColor.GRAY + "Nick is now active."));
-				MetaLoader ml = new MetaLoader(pd.getProxiedPlayer());
-				ml.saveMeta("globalchat-nick", nickname);
 			}
 		}else {
 			
@@ -57,20 +53,17 @@ public class NickCommand extends Command {
 			}
 			
 			ProxiedPlayer pp2 = ProxyServer.getInstance().getPlayer(playerName);
-			PlayerData pd2 = Main.getPlayerData(pp2);
+			GPlayer pd2 = Main.getPlayerData(pp2);
 			
 			if(nickname.equals("delete")) {
 				pd2.setCustomNick(null);
 				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.NICKNAME + ChatColor.GRAY + "Nick deleted successfuly for player: "+playerName));
 				pp2.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.NICKNAME + ChatColor.GRAY + "Nick deleted successfuly from player: "+playerName));
-				MetaLoader ml = new MetaLoader(pd2.getProxiedPlayer());
-				ml.removeOwnMeta("globalchat-nick");
+				LuckPermsManager.removeMetaNode(pp2, "globalchat-nick");
 			}else {
 				pd2.setCustomNick(nickname);
 				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.NICKNAME + ChatColor.GRAY + "Nick changed successfuly for player: "+playerName));
 				pp2.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.NICKNAME + ChatColor.GRAY + "Nick changed successfuly from player: "+playerName));
-				MetaLoader ml = new MetaLoader(pd2.getProxiedPlayer());
-				ml.saveMeta("globalchat-nick", nickname);
 			}
 		}
 		

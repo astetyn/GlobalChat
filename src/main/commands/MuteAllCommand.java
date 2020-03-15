@@ -2,7 +2,7 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
-import main.playerdata.PlayerData;
+import main.playerdata.GPlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -23,9 +23,9 @@ public class MuteAllCommand extends Command {
 		}
 		
 		ProxiedPlayer pp = (ProxiedPlayer) commandSender;
-		PlayerData pd = Main.getPlayerData(pp);
+		GPlayer pd = Main.getPlayerData(pp);
 		
-		for(PlayerData pdd : Main.playerDataList) {
+		for(GPlayer pdd : Main.gPlayers) {
 			if(pdd.equals(pd)) {
 				continue;
 			}
