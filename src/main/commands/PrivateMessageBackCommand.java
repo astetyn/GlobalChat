@@ -28,7 +28,7 @@ public class PrivateMessageBackCommand extends Command {
 		GPlayer pd = Main.getPlayerData(pp);
 		
 		if(pd.isMuted()) {
-			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "You are silenced. Your message will not be shown."));
+			pp.sendMessage(ChatPrefabrics.SILENCE_CANT_TALK);
 			return;
 		}
 		

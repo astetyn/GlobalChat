@@ -1,5 +1,6 @@
 package main.playerdata;
 
+import main.Permissions;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.cacheddata.CachedMetaData;
@@ -21,10 +22,10 @@ public class LuckPermsManager {
 		
 		syncPrefix(gPlayer);
 		
-	    if(!gPlayer.getProxiedPlayer().hasPermission("globalchat.setcolor")) {
+	    if(!gPlayer.getProxiedPlayer().hasPermission(Permissions.SET_COLOR)) {
 			removeMetaNode(gPlayer.getProxiedPlayer(),"globalchat-color");
 		}
-	    if(!gPlayer.getProxiedPlayer().hasPermission("globalchat.socialspy")) {
+	    if(!gPlayer.getProxiedPlayer().hasPermission(Permissions.SOCIAL_SPY)) {
 	    	removeMetaNode(gPlayer.getProxiedPlayer(),"globalchat-socialspy");
 	    }
 	    
@@ -52,7 +53,7 @@ public class LuckPermsManager {
 		removeMetaNode(gPlayer.getProxiedPlayer(), "globalchat-socialspy");
 		removeMetaNode(gPlayer.getProxiedPlayer(), "globalchat-mute");
 		
-		if(gPlayer.getProxiedPlayer().hasPermission("globalchat.setcolor")) {
+		if(gPlayer.getProxiedPlayer().hasPermission(Permissions.SET_COLOR)) {
 			if(gPlayer.getColorIndex()!='7') {
 				user.data().add(MetaNode.builder("globalchat-color",gPlayer.getColorIndex()+"").build());
 			}

@@ -1,2 +1,19 @@
 #Show GlobalChat version message on login.
-showInfoMessage: true
+showVersionMessage: true
+
+#Add space between prefix and name
+addExtraSpace: false
+
+#Use separate colors for prefix and nickname (if false, prefix last color will have effect on nickname)
+separateColors: false
+
+#Default color code for nicknames (this color will be default for all players without meta.globalchat.nickcolor.x)
+#No effect if separateColors is true and player has prefix
+defaultNicknameColor: "7"
+
+#Default color code for messages (this color will be default for all players without setcolor)
+defaultMessageColor: "7"
+
+#List of all bad word which will be filtered. If using diacritics, you must save file with UTF-8 encoding!
+badWords: ["fuck","dick"]
+

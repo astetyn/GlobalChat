@@ -1,6 +1,8 @@
 package main;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class ChatPrefabrics {
 
@@ -26,5 +28,7 @@ public class ChatPrefabrics {
 	
 	public static final String PLAYER_NOT_ONLINE = WARNING + ChatColor.RED + "Player is not online.";
 	
+	
+	public static final BaseComponent[] SILENCE_CANT_TALK = TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "You are silenced. Your message will not be shown.");
 	
 }

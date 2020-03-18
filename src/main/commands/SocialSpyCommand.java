@@ -2,6 +2,7 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
+import main.Permissions;
 import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -12,7 +13,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class SocialSpyCommand extends Command {
 
 	public SocialSpyCommand() {
-		super("socialspy", "globalchat.socialspy", "ss");
+		super("socialspy", Permissions.SOCIAL_SPY, "ss");
 	}
 
 	@Override

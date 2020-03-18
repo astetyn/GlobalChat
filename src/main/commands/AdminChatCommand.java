@@ -2,6 +2,7 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
+import main.Permissions;
 import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -12,7 +13,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class AdminChatCommand extends Command {
 
 	public AdminChatCommand() {
-		super("ac", "globalchat.adminchat", "adminchat", "a");
+		super("ac", Permissions.ADMINCHAT, "adminchat", "a");
 	}
 
 	@Override
@@ -44,11 +45,11 @@ public class AdminChatCommand extends Command {
 			}
 			for(GPlayer pdd : Main.gPlayers) {
 				ProxiedPlayer admin = pdd.getProxiedPlayer();
-				if(pdd.getProxiedPlayer().hasPermission("globalchat.adminchat")) {
+				if(pdd.getProxiedPlayer().hasPermission(Permissions.ADMINCHAT)) {
 					admin.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.ADMIN_CHAT + ChatColor.GRAY + pp.getName() + "> " + ChatColor.RED + message));
 				}
 			}
-			Main.LOG.info("AC "+pp.getName()+"> "+message);
+			Main.logMessage("[AC] "+pp.getName()+">"+message);
 		}
 		
 	}

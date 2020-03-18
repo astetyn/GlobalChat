@@ -2,6 +2,7 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
+import main.Permissions;
 import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -13,7 +14,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class UnmuteCommand extends Command {
 
 	public UnmuteCommand() {
-		super("unmute", "globalchat.mute", "unsilence");
+		super("unmute", Permissions.MUTE, "unsilence");
 	}
 
 	@Override
@@ -58,7 +59,7 @@ public class UnmuteCommand extends Command {
 			unmutedPlayerData.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE +
 					ChatColor.GRAY + "You have been unsilenced. Your messages will be shown now."));
 			
-			Main.LOG.info("User "+pp.getName()+ " unmuted user "+playerName);
+			Main.logMessage("[Mute] User "+pp.getName()+ " unmuted user "+playerName);
 		}else {
 			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.WARNING + ChatColor.RED + "Player is not silenced!. For silence, please use - /mute <nick>"));
 		}

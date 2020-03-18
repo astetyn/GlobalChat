@@ -1,10 +1,11 @@
 package main.message;
 
-import java.util.Arrays;
 import java.util.List;
 
 import main.ChatPrefabrics;
 import main.Main;
+import main.Permissions;
+import main.config.GlobalChatConfiguration;
 import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -35,22 +36,23 @@ public class GlobalMessage {
 	public void wantsToSendMessage() {
 		
 		if(pd.isMuted()) {
-			sender.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "You are silenced. Your message will not be shown."));
+			sender.sendMessage(ChatPrefabrics.SILENCE_CANT_TALK);
 			return;
 		}
 		
 		if(pd.hasActivedAdminChat()) {
 			for(GPlayer pdd : Main.gPlayers) {
-				if(pdd.getProxiedPlayer().hasPermission("globalchat.adminchat")) {
+				if(pdd.getProxiedPlayer().hasPermission(Permissions.ADMINCHAT)) {
 					ProxiedPlayer admin = pdd.getProxiedPlayer();
 					message = ChatColor.translateAlternateColorCodes('&', message);
 					admin.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.ADMIN_CHAT + ChatColor.GRAY + nickname + "> " + ChatColor.RED + message));
 				}
 			}
+			Main.logMessage("[AC] "+pd.getProxiedPlayer().getName()+">"+message);
 			return;
 		}
 		
-		if(!pd.getProxiedPlayer().hasPermission("globalchat.adminchat")) {
+		if(!pd.getProxiedPlayer().hasPermission(Permissions.NO_MESSAGE_CHECK)) {
 			if(isMessageSpam(message)) {
 				return;
 			}
@@ -60,7 +62,7 @@ public class GlobalMessage {
 		char msgColorIndex = pd.getColorIndex();
 		message = ChatColor.getByChar(msgColorIndex) + message;
 		
-		if(pd.getProxiedPlayer().hasPermission("globalchat.adminchat")) {
+		if(pd.getProxiedPlayer().hasPermission(Permissions.COLORED_MESSAGES)) {
 			message = ChatColor.translateAlternateColorCodes('&', message);
 		}
 		
@@ -72,19 +74,28 @@ public class GlobalMessage {
 		pd.setLastMessage(message);
 		pd.setLastTimestamp(System.currentTimeMillis());
 		
-		if(prefix.isEmpty()) {
-			prefix = ChatColor.DARK_GRAY+"";
-		}
-		
 		String finalMsg = "";
 		
 		finalMsg += getServerString(server);
 		finalMsg += ChatColor.translateAlternateColorCodes('&', prefix);
-		finalMsg += nickname;
+		
+		if(GlobalChatConfiguration.config.getBoolean("addExtraSpace")) {
+			finalMsg += " ";
+		}
+		
+		if(GlobalChatConfiguration.config.getBoolean("separateColors")) {
+			finalMsg += ChatColor.RESET;
+		}
+		
+		if(prefix.isEmpty()||GlobalChatConfiguration.config.getBoolean("separateColors")) {
+			char c = GlobalChatConfiguration.config.getString("defaultNicknameColor").charAt(0);
+			ChatColor defaultNicknameColor = ChatColor.getByChar(c);
+			nickname = defaultNicknameColor + nickname;
+		}
+		
+		finalMsg += ChatColor.translateAlternateColorCodes('&', nickname);
 		finalMsg += ChatColor.GRAY+""+ChatColor.BOLD+" > ";
 		finalMsg += message;
-	
-		Main.LOG.info(sender.getName()+ " > "+ message);
 		
 		for(GPlayer pdd : Main.gPlayers) {
 			
@@ -103,6 +114,7 @@ public class GlobalMessage {
 			
 			pp.sendMessage(TextComponent.fromLegacyText(finalMsg));
 		}
+		Main.logMessage(sender.getName()+ ">"+ message);
 	}
 	
 	private boolean isMessageSpam(String msg) {
@@ -142,16 +154,17 @@ public class GlobalMessage {
 		
 	}
 
-	private String stripBadWords(String sprava) {
+	private String stripBadWords(String msg) {
 		
-		List<String> badWords = Arrays.asList("dick","penis","vagina","fuck","kurva","kurwa","pica","kokot",
-				"jebat","jebe","pice","idiot","debil","picus","imbecil","retard","bitch");
+		List<String> badWords = GlobalChatConfiguration.config.getStringList("badWords");
 		
 		for(String badWord : badWords) {
-			if(sprava.contains(badWord)) {
-				sprava = sprava.replaceAll(badWord, "***");
+			if(msg.contains(badWord)) {
+				msg = msg.replaceAll(badWord, "***");
 			}
 		}
-		return sprava;
+		return msg;
 	}
+	
+	
 }

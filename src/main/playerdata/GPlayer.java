@@ -2,6 +2,8 @@ package main.playerdata;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import main.config.GlobalChatConfiguration;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class GPlayer {
@@ -23,7 +25,7 @@ public class GPlayer {
 		
 		this.player = pp;
 		this.prefix = "";
-		this.colorIndex = '7';
+		this.colorIndex = GlobalChatConfiguration.config.getString("defaultMessageColor").charAt(0);
 		this.lastMessage = "";
 		this.lastMessageTimestamp = 0;
 		this.muted = false;

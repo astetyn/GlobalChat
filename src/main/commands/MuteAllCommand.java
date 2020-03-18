@@ -2,6 +2,7 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
+import main.Permissions;
 import main.playerdata.GPlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -11,7 +12,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class MuteAllCommand extends Command {
 
 	public MuteAllCommand() {
-		super("muteall", "globalchat.muteall", "silenceall");
+		super("muteall", Permissions.MUTE_ALL, "silenceall");
 	}
 
 	@Override
@@ -33,6 +34,6 @@ public class MuteAllCommand extends Command {
 			pdd.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + "All players have been silenced. Your messages will not be shown."));
 		}
 		pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + "All players except you have been silenced."));
-		Main.LOG.info("All players have been muted by user: "+pp.getName());
+		Main.logMessage("[Mute] All players have been muted by user: "+pp.getName());
 	}
 }

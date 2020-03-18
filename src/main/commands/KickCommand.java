@@ -2,6 +2,7 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
+import main.Permissions;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -12,7 +13,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class KickCommand extends Command {
 
 	public KickCommand() {
-		super("gkick","globalchat.kick");
+		super("gkick",Permissions.KICK);
 	}
 
 	@Override
@@ -46,11 +47,11 @@ public class KickCommand extends Command {
 					reason += args[i]+" ";
 				}
 				p.disconnect(TextComponent.fromLegacyText(reason));
-				Main.LOG.info("User "+pp.getName()+" kicked "+name+" from server. Reason: "+reason);
+				Main.logMessage("[Kick] User "+pp.getName()+" kicked "+name+" from server. Reason: "+reason);
 			}else {
 				String reason = "Bol/a si vyhodený/á zo servera.";
 				p.disconnect(TextComponent.fromLegacyText(reason));
-				Main.LOG.info("User "+pp.getName()+" kicked "+name+" from server. Reason: "+reason);
+				Main.logMessage("[Kick] User "+pp.getName()+" kicked "+name+" from server. Reason: "+reason);
 			}
 		}
 		

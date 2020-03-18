@@ -2,6 +2,7 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
+import main.Permissions;
 import main.playerdata.LuckPermsManager;
 import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
@@ -14,7 +15,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class NickCommand extends Command {
 
 	public NickCommand() {
-		super("nickname", "globalchat.changenick", "nick", "changenick","customnick");
+		super("nickname", Permissions.CHANGE_NICK, "nick", "changenick","customnick");
 	}
 
 	@Override

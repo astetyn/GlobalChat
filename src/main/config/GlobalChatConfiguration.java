@@ -8,6 +8,7 @@ import java.io.OutputStream;
 
 import com.google.common.io.ByteStreams;
 
+import main.Main;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -15,42 +16,33 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 public class GlobalChatConfiguration {
 
-	Plugin plugin;
-	Configuration config;
+	public static Configuration config;
 	
-	public GlobalChatConfiguration(Plugin plugin) {
-		this.plugin = plugin;
+	public static void load(Plugin plugin) {
+		
 		try {
-			load();
+			if (!plugin.getDataFolder().exists()) {
+	            plugin.getDataFolder().mkdir();
+	        }
+			
+			File file = new File(plugin.getDataFolder(), "config.yml");
+	
+	        if (!file.exists()) {
+	            file.createNewFile();
+	            try (InputStream is = plugin.getResourceAsStream("config.yml");
+	            OutputStream os = new FileOutputStream(file)) {
+	    			ByteStreams.copy(is, os);
+	       		}
+	        }
+	        
+			config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
 		} catch (IOException e) {
 			e.printStackTrace();
+			Main.LOG.warning("-----------------------------");
+			Main.LOG.warning("Config in GlobalChat is corrupted.");
+			Main.LOG.warning("Please repair the config or delete config file. Plugin will create new one.");
+			Main.LOG.warning("-----------------------------");
 		}
 	}
-	
-	public void load() throws IOException {
-		
-		if (!plugin.getDataFolder().exists()) {
-            plugin.getDataFolder().mkdir();
-        }
-		
-		File file = new File(plugin.getDataFolder(), "config.yml");
 
-        if (!file.exists()) {
-            file.createNewFile();
-            try (InputStream is = plugin.getResourceAsStream("config.yml");
-            OutputStream os = new FileOutputStream(file)) {
-    			ByteStreams.copy(is, os);
-       		}
-        }
-		config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
-	}
-	
-	public void save() throws IOException {
-		ConfigurationProvider.getProvider(YamlConfiguration.class).save(config, new File(plugin.getDataFolder(), "config.yml"));
-	}
-	
-	public Object getValue(String key) {
-		Object value = config.get(key);
-		return value;
-	}
 }

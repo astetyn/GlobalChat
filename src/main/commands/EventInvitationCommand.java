@@ -1,6 +1,7 @@
 package main.commands;
 
 import main.ChatPrefabrics;
+import main.Permissions;
 import main.eventinvitation.EventInvitation;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -11,7 +12,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class EventInvitationCommand extends Command {
 
 	public EventInvitationCommand() {
-		super("event", "globalchat.event", "makeevent");
+		super("event", Permissions.EVENT, "makeevent");
 	}
 
 	@Override
@@ -38,7 +39,4 @@ public class EventInvitationCommand extends Command {
 		}
 		
 	}
-
-	
-	
 }

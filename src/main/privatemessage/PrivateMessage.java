@@ -68,6 +68,6 @@ public class PrivateMessage {
 			}
 		}
 		
-		Main.LOG.info("[PM] " +sender.getName()+" > "+receiver.getName()+" > "+ msg);
+		Main.logMessage("[PM] " +sender.getName()+">"+receiver.getName()+">>>"+ msg);
 	}
 }

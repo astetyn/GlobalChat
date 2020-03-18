@@ -2,6 +2,7 @@ package main.commands;
 
 import main.ChatPrefabrics;
 import main.Main;
+import main.Permissions;
 import main.playerdata.GPlayer;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
@@ -14,7 +15,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class SetcolorCommand extends Command {
 	
 	public SetcolorCommand() {
-		super("setcolor","globalchat.setcolor");
+		super("setcolor",Permissions.SET_COLOR);
 	}
 
 	@Override
@@ -53,11 +54,11 @@ public class SetcolorCommand extends Command {
 			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.COLOR + ChatColor.GREEN + "Color successfuly changed to: "
 			+ChatColor.getByChar(index)+"this."));
 			
-			Main.LOG.info("User: "+pp.getName()+" changed chat color code to: "+index);
+			Main.logMessage("[SETCOLOR] User: "+pp.getName()+" changed chat color code to: "+index);
 			
 		}else if(tokenCount>1) {
 	        	
-			if(!pp.hasPermission("globalchat.setcolor.others")) {
+			if(!pp.hasPermission(Permissions.SET_COLOR_OTHERS)) {
 				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.INSUFFICIENT_PERMISSION));
 				return;
 			}
@@ -93,7 +94,7 @@ public class SetcolorCommand extends Command {
 			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.COLOR + ChatColor.GREEN + "Color successfuly changed to: "
 			+ChatColor.getByChar(index)+"this " + ChatColor.GREEN + "for player "+ChatColor.YELLOW+name));
 			
-			Main.LOG.info("User: "+pp.getName()+" changed chat color code to: "+index + " for user: "+name);
+			Main.logMessage("[SETCOLOR] User: "+pp.getName()+" changed chat color code to: "+index + " for user: "+name);
 			
 		}
 		

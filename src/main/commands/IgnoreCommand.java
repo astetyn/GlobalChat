@@ -43,7 +43,7 @@ public class IgnoreCommand extends Command {
 				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "Messages from this player will be hidden for you."));
 			}	
 			
-			Main.LOG.info("User "+pp.getName()+" used /ignore for "+name);
+			Main.logMessage("[Ignore] User "+pp.getName()+" used /ignore for "+name);
 			
 		}
 		

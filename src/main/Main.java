@@ -14,6 +14,7 @@ import main.commands.MuteCommand;
 import main.commands.NickCommand;
 import main.commands.PrivateMessageBackCommand;
 import main.commands.PrivateMessageCommand;
+import main.commands.ReloadCommand;
 import main.commands.SetcolorCommand;
 import main.commands.SocialSpyCommand;
 import main.commands.UnmuteCommand;
@@ -42,26 +43,25 @@ public class Main extends Plugin implements Listener {
 	
 	public static final Logger LOG = BungeeCord.getInstance().getLogger();
 	public static List<GPlayer> gPlayers = new ArrayList<GPlayer>();
-	public static GlobalChatConfiguration config;
 	public static Plugin plugin;
 	
 	@Override
     public void onEnable() {
 		
-		plugin = this;
+		Plugin luckPerms = getProxy().getPluginManager().getPlugin("LuckPerms");
 		
-		if(getProxy().getPluginManager().getPlugin("LuckPerms")==null) {
+		if(luckPerms==null) {
 			LOG.warning("-----------------------------");
 			LOG.warning("GlobalChat requires LuckPerms installed.");
-			LOG.warning("Plugin will NOT WORK please install LuckPerms and restart the server.");
+			LOG.warning("Plugin will NOT WORK please install LuckPerms v5 and restart the server.");
 			LOG.warning("-----------------------------");
 			return;
 		}
 		
+		plugin = this;
+		GlobalChatConfiguration.load(this);
 		
         BungeeCord.getInstance().getScheduler().schedule(this, new LoaderRunnable(), 5, 5,TimeUnit.SECONDS);
-        
-        BungeeCord.getInstance().registerChannel("globalchat");
         
         getProxy().getPluginManager().registerListener(this, this); 
         
@@ -78,6 +78,7 @@ public class Main extends Plugin implements Listener {
         getProxy().getPluginManager().registerCommand(this, new EventInvitationCommand());
         getProxy().getPluginManager().registerCommand(this, new EventJoinCommand());
         getProxy().getPluginManager().registerCommand(this, new NickCommand());
+        getProxy().getPluginManager().registerCommand(this, new ReloadCommand());
         
     }
 	
@@ -145,6 +146,10 @@ public class Main extends Plugin implements Listener {
         			p.sendMessage(TextComponent.fromLegacyText(ChatColor.DARK_GRAY+"["+ChatColor.GRAY+"WoF"+ChatColor.DARK_GRAY+"] "+ChatColor.WHITE+e.getPlayer().getName()+ChatColor.GRAY+" sa pripojil/a do hry!"));
         		}
 
+        		if(!GlobalChatConfiguration.config.getBoolean("showVersionMessage")) {
+        			return;
+        		}
+
         		PluginDescription pd = plugin.getDescription();
 	        	String version = pd.getVersion();
         		TextComponent globalChatVersionInfo = new TextComponent();
@@ -185,4 +190,8 @@ public class Main extends Plugin implements Listener {
         }
 		
     }
+	
+	public static void logMessage(String msg) {
+		LOG.info(ChatColor.WHITE+"["+ChatColor.GREEN+"GCH"+ChatColor.WHITE+"] "+ChatColor.RESET+msg);
+	}
 }
