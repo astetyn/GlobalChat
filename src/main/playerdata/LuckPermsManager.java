@@ -73,6 +73,10 @@ public class LuckPermsManager {
 	
 	public static void syncPrefix(GPlayer gPlayer) {
 
+		if(gPlayer.getProxiedPlayer()==null) {
+			return;
+		}
+		
 		User user = api.getUserManager().getUser(gPlayer.getProxiedPlayer().getUniqueId());
 		QueryOptions qo = api.getContextManager().getQueryOptions(gPlayer.getProxiedPlayer());
 		CachedMetaData metaData = user.getCachedData().getMetaData(qo);

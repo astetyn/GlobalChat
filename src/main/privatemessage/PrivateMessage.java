@@ -2,6 +2,7 @@ package main.privatemessage;
 
 import main.ChatPrefabrics;
 import main.Main;
+import main.Permissions;
 import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
@@ -42,32 +43,46 @@ public class PrivateMessage {
 				return;
 			}
 		}
-		sendMessage(pd, receiverData, message);
+		sendMessage(pd, receiverData);
 	}
 	
-	private void sendMessage(GPlayer senderData, GPlayer receiverData, String msg) {
+	private void sendMessage(GPlayer gSender, GPlayer gReceiver) {
 		
-		senderData.setLastPrivateMsgReceiverName(receiverData.getProxiedPlayer().getName());
-		receiverData.setLastPrivateMsgReceiverName(senderData.getProxiedPlayer().getName());
+		gSender.setLastPrivateMsgReceiverName(gReceiver.getProxiedPlayer().getName());
+		gReceiver.setLastPrivateMsgReceiverName(gSender.getProxiedPlayer().getName());
 		
-		ProxiedPlayer sender = senderData.getProxiedPlayer();
-		ProxiedPlayer receiver = receiverData.getProxiedPlayer();
+		ProxiedPlayer sender = gSender.getProxiedPlayer();
+		ProxiedPlayer receiver = gReceiver.getProxiedPlayer();
 		
-		receiver.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.PRIVATE_MESSAGE + ChatColor.GRAY + sender.getName() + ChatColor.GOLD + " > "
-		+ ChatColor.GRAY + "me" + " > " + ChatColor.WHITE + msg));
+		String sName = sender.getName();
+		String rName = receiver.getName();
+		
+		if(gSender.getCustomNick()!=null) {
+			sName = gSender.getCustomNick();
+		}
+		if(gReceiver.getCustomNick()!=null) {
+			rName = gReceiver.getCustomNick();
+		}
+		
+		if(gSender.getProxiedPlayer().hasPermission(Permissions.COLORED_MESSAGES)) {
+			message = ChatColor.translateAlternateColorCodes('&', message);
+		}
+		
+		receiver.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.PRIVATE_MESSAGE+ChatColor.GRAY+sName+ChatColor.GOLD+" > "
+		+ ChatColor.GRAY + "me" + " > " + ChatColor.WHITE + message));
 		
 		sender.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.PRIVATE_MESSAGE + ChatColor.GRAY + "me" + ChatColor.GOLD + " > "
-		+ ChatColor.GRAY + receiver.getName() + " > " + ChatColor.WHITE + msg));
+		+ ChatColor.GRAY + rName + " > " + ChatColor.WHITE + message));
 		
 		for(GPlayer pd : Main.gPlayers) {
 			if(pd.hasSocialSpy()) {
-				if(!pd.equals(senderData)&&!pd.equals(receiverData)) {
-					pd.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SOCIAL_SPY + ChatColor.GRAY + sender.getName() + ChatColor.GOLD + " > "
-				+ ChatColor.GRAY + receiver.getName() + " > " + ChatColor.GRAY + ChatColor.ITALIC + msg));
+				if(!pd.equals(gSender)&&!pd.equals(gReceiver)) {
+					pd.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SOCIAL_SPY + ChatColor.GRAY + sName + ChatColor.GOLD + " > "
+				+ ChatColor.GRAY + rName + " > " + ChatColor.GRAY + ChatColor.ITALIC + message));
 				}
 			}
 		}
 		
-		Main.logMessage("[PM] " +sender.getName()+">"+receiver.getName()+">>>"+ msg);
+		Main.logMessage("[PM] " +sender.getName()+">"+receiver.getName()+">>>"+ message);
 	}
 }

@@ -111,6 +111,10 @@ public class Main extends Plugin implements Listener {
 		ProxiedPlayer pp = (ProxiedPlayer) e.getSender();
 		GPlayer pd = getPlayerData(pp);
 		
+		if(pd==null) {
+			return;
+		}
+		
 		GlobalMessage gs = new GlobalMessage(pd, line);
 		gs.wantsToSendMessage();
 
