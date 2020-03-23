@@ -8,7 +8,6 @@ import main.Permissions;
 import main.config.GlobalChatConfiguration;
 import main.playerdata.GPlayer;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
@@ -36,15 +35,6 @@ public class GlobalMessage {
 	
 	public void wantsToSendMessage() {
 		
-		//DEBUG
-		if(message=="test044") {
-			pd.getProxiedPlayer().sendMessage(new TextComponent("áno prosímč"));
-			pd.getProxiedPlayer().sendMessage(new TextComponent(TextComponent.fromLegacyText("áno prosímč")));
-			pd.getProxiedPlayer().sendMessage(new ComponentBuilder("áno prosímč").create());
-			pd.getProxiedPlayer().sendMessage("áno prosímč");
-		}
-		//DEBUG
-		
 		if(pd.isMuted()) {
 			sender.sendMessage(ChatPrefabrics.SILENCE_CANT_TALK);
 			return;
@@ -69,8 +59,12 @@ public class GlobalMessage {
 				return;
 			}
 			message = createCleanMessage(message);
+			message = message.trim();
+			if(message.isEmpty()) {
+				return;
+			}
 		}
-		
+		message = message.trim();
 		char msgColorIndex = pd.getColorIndex();
 		message = ChatColor.getByChar(msgColorIndex) + message;
 		

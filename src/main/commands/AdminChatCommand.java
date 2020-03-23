@@ -43,10 +43,23 @@ public class AdminChatCommand extends Command {
 			for(int i = 0;i<tokenCount;i++) {
 				message += args[i]+" ";
 			}
+			
+			String customNickname = pd.getCustomNick();
+			String nickname = (customNickname == null) ? pp.getName() : customNickname;
+			
+			if(pd.getProxiedPlayer().hasPermission(Permissions.COLORED_MESSAGES)) {
+				message = ChatColor.translateAlternateColorCodes('&', message);
+			}
+			
+			message = message.trim();
+			if(message.isEmpty()) {
+				return;
+			}
+			
 			for(GPlayer pdd : Main.gPlayers) {
 				ProxiedPlayer admin = pdd.getProxiedPlayer();
 				if(pdd.getProxiedPlayer().hasPermission(Permissions.ADMINCHAT)) {
-					admin.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.ADMIN_CHAT + ChatColor.GRAY + pp.getName() + "> " + ChatColor.RED + message));
+					admin.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.ADMIN_CHAT + ChatColor.GRAY + nickname + "> " + ChatColor.RED + message));
 				}
 			}
 			Main.logMessage("[AC] "+pp.getName()+">"+message);
