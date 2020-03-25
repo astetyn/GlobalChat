@@ -1,6 +1,9 @@
 #Show GlobalChat version message on login.
 showVersionMessage: true
 
+#If this is enabled, there will be small icon of first letter of server in front of every message
+showServerIcon: true
+
 #Add space between prefix and name
 addExtraSpace: false
 
@@ -14,6 +17,12 @@ defaultNicknameColor: "7"
 #Default color code for messages (this color will be default for all players without setcolor)
 defaultMessageColor: "7"
 
+#Default color code for arrow between name and message
+defaultArrowColor: "7"
+
+#Time in seconds which player has to wait before next message, can be overriden with globalchat.admin.nocheck
+waitSpamTime: 2
+
 #List of all bad word which will be filtered. If using diacritics, you must save file with UTF-8 encoding!
-badWords: ["fuck","dick"]
+badWords: ["fuck","anotherBadWord"]
 

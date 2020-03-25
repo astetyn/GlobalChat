@@ -20,7 +20,7 @@ public class LuckPermsManager {
 		QueryOptions qo = api.getContextManager().getQueryOptions(gPlayer.getProxiedPlayer());
 		CachedMetaData metaData = user.getCachedData().getMetaData(qo);
 		
-		syncPrefix(gPlayer);
+		syncPrefixAndSufix(gPlayer);
 		
 	    if(!gPlayer.getProxiedPlayer().hasPermission(Permissions.SET_COLOR)) {
 			removeMetaNode(gPlayer.getProxiedPlayer(),"globalchat-color");
@@ -71,7 +71,7 @@ public class LuckPermsManager {
 		
 	}
 	
-	public static void syncPrefix(GPlayer gPlayer) {
+	public static void syncPrefixAndSufix(GPlayer gPlayer) {
 
 		if(gPlayer.getProxiedPlayer()==null) {
 			return;
@@ -87,6 +87,10 @@ public class LuckPermsManager {
 		String prefix = metaData.getPrefix();
 	    if(prefix!=null) {
 	    	gPlayer.setPrefix(prefix);
+	    }
+	    String suffix = metaData.getSuffix();
+	    if(suffix!=null) {
+	    	gPlayer.setSuffix(suffix);
 	    }
 	}
 	

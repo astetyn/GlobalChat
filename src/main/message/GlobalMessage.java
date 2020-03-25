@@ -14,12 +14,11 @@ import net.md_5.bungee.api.connection.Server;
 
 public class GlobalMessage {
 	
-	private final double MESSAGE_DELAY_SECONDS = 2;
-	
 	private ProxiedPlayer sender;
 	private GPlayer pd;
 	private String message;
 	private String prefix;
+	private String suffix;
 	private Server server;
 	private String nickname;
 	
@@ -28,6 +27,7 @@ public class GlobalMessage {
 		this.message = message;
 		this.pd = pd;
 		this.prefix = pd.getPrefix();
+		this.suffix = pd.getSuffix();
 		this.server = sender.getServer();
 		String customNickname = pd.getCustomNick();
 		this.nickname = (customNickname == null) ? pd.getProxiedPlayer().getName() : customNickname;
@@ -82,7 +82,10 @@ public class GlobalMessage {
 		
 		String finalMsg = "";
 		
-		finalMsg += getServerString(server);
+		if(GlobalChatConfiguration.config.getBoolean("showServerIcon")) {
+			finalMsg += getServerIcon(server);
+		}
+		
 		finalMsg += ChatColor.translateAlternateColorCodes('&', prefix);
 		
 		if(GlobalChatConfiguration.config.getBoolean("addExtraSpace")) {
@@ -100,7 +103,16 @@ public class GlobalMessage {
 		}
 		
 		finalMsg += ChatColor.translateAlternateColorCodes('&', nickname);
-		finalMsg += ChatColor.GRAY+""+ChatColor.BOLD+" > ";
+		
+		if(GlobalChatConfiguration.config.getBoolean("addExtraSpace")) {
+			finalMsg += " ";
+		}
+		finalMsg += ChatColor.RESET;
+		finalMsg += ChatColor.translateAlternateColorCodes('&', suffix);
+		
+		char c = GlobalChatConfiguration.config.getString("defaultArrowColor").charAt(0);
+		
+		finalMsg += ChatColor.getByChar(c)+""+ChatColor.BOLD+" > ";
 		finalMsg += message;
 		
 		for(GPlayer pdd : Main.gPlayers) {
@@ -125,7 +137,9 @@ public class GlobalMessage {
 	
 	private boolean isMessageSpam(String msg) {
 		
-		if(pd.getLastTimestamp()+MESSAGE_DELAY_SECONDS*1000>System.currentTimeMillis()) {
+		int waitTime = GlobalChatConfiguration.config.getInt("waitSpamTime");
+		
+		if(pd.getLastTimestamp()+waitTime*1000>System.currentTimeMillis()) {
 			sender.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SPAM + ChatColor.RED + "Calm down! Wait few seconds before next message."));
 			return true;
 		}
@@ -152,7 +166,7 @@ public class GlobalMessage {
 		
 	}
 
-	private String getServerString(Server server) {
+	private String getServerIcon(Server server) {
 		
 		char firstChar;
 		firstChar = server.getInfo().getName().charAt(0);

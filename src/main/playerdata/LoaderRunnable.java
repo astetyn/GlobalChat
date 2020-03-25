@@ -8,7 +8,7 @@ public class LoaderRunnable implements Runnable {
 	public void run() {
 		
 		for(GPlayer gPlayer : Main.gPlayers) {
-			LuckPermsManager.syncPrefix(gPlayer);
+			LuckPermsManager.syncPrefixAndSufix(gPlayer);
 		}
 		
 	}

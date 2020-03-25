@@ -10,6 +10,7 @@ public class GPlayer {
 
 	private ProxiedPlayer player;
 	private String prefix;
+	private String suffix;
 	private char colorIndex;
 	private String lastMessage;
 	private String lastPrivateMsgReceiverName;
@@ -25,6 +26,7 @@ public class GPlayer {
 		
 		this.player = pp;
 		this.prefix = "";
+		this.suffix = "";
 		this.colorIndex = GlobalChatConfiguration.config.getString("defaultMessageColor").charAt(0);
 		this.lastMessage = "";
 		this.lastMessageTimestamp = 0;
@@ -122,6 +124,14 @@ public class GPlayer {
 
 	public void setCustomNick(String customNick) {
 		this.customNick = customNick;
+	}
+
+	public String getSuffix() {
+		return suffix;
+	}
+
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
 	}
 	
 }
