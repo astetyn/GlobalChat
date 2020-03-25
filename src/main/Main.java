@@ -48,6 +48,9 @@ public class Main extends Plugin implements Listener {
 	@Override
     public void onEnable() {
 		
+		int pluginId = 6875;
+        new Metrics(this, pluginId);
+		
 		Plugin luckPerms = getProxy().getPluginManager().getPlugin("LuckPerms");
 		
 		if(luckPerms==null) {
