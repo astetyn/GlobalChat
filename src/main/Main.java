@@ -149,9 +149,12 @@ public class Main extends Plugin implements Listener {
 	        	gPlayer.setJoinedServer(true);
 	        	LuckPermsManager.loadAllDataToPlayer(gPlayer);
         		
-        		for(ProxiedPlayer p : ProxyServer.getInstance().getPlayers()){
-        			p.sendMessage(TextComponent.fromLegacyText(ChatColor.DARK_GRAY+"["+ChatColor.GRAY+"WoF"+ChatColor.DARK_GRAY+"] "+ChatColor.WHITE+e.getPlayer().getName()+ChatColor.GRAY+" sa pripojil/a do hry!"));
-        		}
+	        	if(GlobalChatConfiguration.config.getBoolean("showJoinLeaveMessage")) {
+	        		String prefix = GlobalChatConfiguration.config.getString("joinLeaveMessagePrefix");
+	        		for(ProxiedPlayer p : ProxyServer.getInstance().getPlayers()){
+	        			p.sendMessage(TextComponent.fromLegacyText(ChatColor.DARK_GRAY+"["+ChatColor.GRAY+prefix+ChatColor.DARK_GRAY+"] "+ChatColor.WHITE+e.getPlayer().getName()+ChatColor.GRAY+" joined the game."));
+	        		}
+	        	}
 
         		if(!GlobalChatConfiguration.config.getBoolean("showVersionMessage")) {
         			return;
@@ -178,9 +181,12 @@ public class Main extends Plugin implements Listener {
 			return;
 		}
 		
-		for(ProxiedPlayer p : ProxyServer.getInstance().getPlayers()){
-	         p.sendMessage(TextComponent.fromLegacyText(ChatColor.DARK_GRAY+"["+ChatColor.GRAY+"WoF"+ChatColor.DARK_GRAY+"] "+ChatColor.WHITE+e.getPlayer()+ChatColor.GRAY+" sa odpojil/a z hry."));
-	    }
+		if(GlobalChatConfiguration.config.getBoolean("showJoinLeaveMessage")) {
+    		String prefix = GlobalChatConfiguration.config.getString("joinLeaveMessagePrefix");
+    		for(ProxiedPlayer p : ProxyServer.getInstance().getPlayers()){
+    			p.sendMessage(TextComponent.fromLegacyText(ChatColor.DARK_GRAY+"["+ChatColor.GRAY+prefix+ChatColor.DARK_GRAY+"] "+ChatColor.WHITE+e.getPlayer().getName()+ChatColor.GRAY+" left the game."));
+    		}
+    	}
 		LuckPermsManager.saveAllDataFromPlayer(gPlayer);
 	}
 	

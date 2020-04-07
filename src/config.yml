@@ -1,6 +1,12 @@
 #Show GlobalChat version message on login.
 showVersionMessage: true
 
+#Show message when player joins or leaves.
+showJoinLeaveMessage: true
+
+#This is the prefix in join/leave message, your servers short name can be optimal
+joinLeaveMessagePrefix: "GCH"
+
 #If this is enabled, there will be small icon of first letter of server in front of every message
 showServerIcon: true
 
