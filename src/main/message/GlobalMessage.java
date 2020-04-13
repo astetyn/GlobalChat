@@ -88,7 +88,7 @@ public class GlobalMessage {
 		
 		finalMsg += ChatColor.translateAlternateColorCodes('&', prefix);
 		
-		if(GlobalChatConfiguration.config.getBoolean("addExtraSpace")) {
+		if(GlobalChatConfiguration.config.getBoolean("addExtraSpace")&&!prefix.isEmpty()) {
 			finalMsg += " ";
 		}
 		
@@ -104,9 +104,10 @@ public class GlobalMessage {
 		
 		finalMsg += ChatColor.translateAlternateColorCodes('&', nickname);
 		
-		if(GlobalChatConfiguration.config.getBoolean("addExtraSpace")) {
+		if(GlobalChatConfiguration.config.getBoolean("addExtraSpace")&&!suffix.isEmpty()) {
 			finalMsg += " ";
 		}
+		
 		finalMsg += ChatColor.RESET;
 		finalMsg += ChatColor.translateAlternateColorCodes('&', suffix);
 		

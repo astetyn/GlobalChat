@@ -20,7 +20,11 @@ public class PrivateMessage {
 		this.receiverName = receiver;
 		String msg = "";
 		for(int i = 0;i<args.length;i++) {
-			msg += args[i]+" ";
+			if(i==args.length-1) {
+				msg += args[i];
+			}else {
+				msg += args[i]+" ";
+			}
 		}
 		this.message = msg;
 	}

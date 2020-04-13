@@ -1,10 +1,16 @@
 package main.playerdata;
 
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
 import main.Permissions;
+import main.commands.MuteCommand;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.cacheddata.CachedMetaData;
+import net.luckperms.api.context.ContextManager;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.model.user.UserManager;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.types.MetaNode;
 import net.luckperms.api.query.QueryOptions;
@@ -71,6 +77,37 @@ public class LuckPermsManager {
 		
 	}
 	
+	public static void removeAllMuteNodes() {
+		
+		UserManager um = api.getUserManager();
+		ContextManager cm = api.getContextManager();
+		
+		for(UUID uuid : MuteCommand.mutedPlayersUUIDs) {
+			
+			CompletableFuture<User> userFuture = um.loadUser(uuid);
+
+		    userFuture.thenAcceptAsync(user -> {
+		    	QueryOptions qo = cm.getQueryOptions(user).orElse(cm.getStaticQueryOptions());
+		    	CachedMetaData metaData = user.getCachedData().getMetaData(qo);
+		    	
+			    if(!metaData.getMeta().containsKey("globalchat-mute")) {
+			    	return;
+			    }
+			    
+		    	for(Node node : user.getNodes()) {
+		    		if(!(node instanceof MetaNode)) {
+		    			continue;
+		    		}
+		    		if(((MetaNode)node).getMetaKey().equals("globalchat-mute")) {
+		    			user.data().remove(node);
+		    			um.saveUser(user);
+		    		}
+		    	}
+		    });
+		}
+		
+	}
+	
 	public static void syncPrefixAndSufix(GPlayer gPlayer) {
 
 		if(gPlayer.getProxiedPlayer()==null) {
@@ -87,10 +124,14 @@ public class LuckPermsManager {
 		String prefix = metaData.getPrefix();
 	    if(prefix!=null) {
 	    	gPlayer.setPrefix(prefix);
+	    }else {
+	    	gPlayer.setPrefix("");
 	    }
 	    String suffix = metaData.getSuffix();
 	    if(suffix!=null) {
 	    	gPlayer.setSuffix(suffix);
+	    }else {
+	    	gPlayer.setSuffix("");
 	    }
 	}
 	

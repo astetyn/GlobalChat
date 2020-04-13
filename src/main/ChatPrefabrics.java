@@ -29,6 +29,6 @@ public class ChatPrefabrics {
 	public static final String PLAYER_NOT_ONLINE = WARNING + ChatColor.RED + "Player is not online.";
 	
 	
-	public static final BaseComponent[] SILENCE_CANT_TALK = TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "You are silenced. Your message will not be shown.");
+	public static final BaseComponent[] SILENCE_CANT_TALK = TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "You are silenced. Your messages are not visible.");
 	
 }

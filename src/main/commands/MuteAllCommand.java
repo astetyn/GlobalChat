@@ -31,6 +31,7 @@ public class MuteAllCommand extends Command {
 				continue;
 			}
 			pdd.setMuted(true);
+			MuteCommand.mutedPlayersUUIDs.add(pdd.getProxiedPlayer().getUniqueId());
 			pdd.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + "All players have been silenced. Your messages will not be shown."));
 		}
 		pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + "All players except you have been silenced."));

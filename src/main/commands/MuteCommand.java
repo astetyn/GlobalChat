@@ -1,5 +1,9 @@
 package main.commands;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
+
 import main.ChatPrefabrics;
 import main.Main;
 import main.Permissions;
@@ -13,6 +17,8 @@ import net.md_5.bungee.api.plugin.Command;
 
 public class MuteCommand extends Command {
 
+	public static Set<UUID> mutedPlayersUUIDs = new LinkedHashSet<>();
+	
 	public MuteCommand() {
 		super("mute", Permissions.MUTE, "silence");
 	}
@@ -44,14 +50,16 @@ public class MuteCommand extends Command {
 			GPlayer mutedPlayerData = Main.getPlayerData(pp2);
 			
 			if(mutedPlayerData.isMuted()) {
-				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.WARNING + ChatColor.GRAY + "Player is already muted. For unmute type /unmute <nick>"));
+				pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.WARNING + ChatColor.GRAY + "Player is already muted. For unmute - /unmute <nick>"));
 				return;
 			}
 			
 			mutedPlayerData.setMuted(true);
-			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "Player is now silenced. His messages will not be shown."));
+			mutedPlayersUUIDs.add(mutedPlayerData.getProxiedPlayer().getUniqueId());
+			
+			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "Player is silenced. His messages will not be shown."));
 			mutedPlayerData.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE +
-					ChatColor.GRAY + "You have been silenced. Your messages will not be shown."));
+					ChatColor.GRAY + "You are silenced. Your messages will not be shown."));
 			
 			Main.logMessage("[Mute] User "+pp.getName()+ " muted user "+playerName);
 			

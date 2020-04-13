@@ -92,6 +92,10 @@ public class Main extends Plugin implements Listener {
 			LuckPermsManager.saveAllDataFromPlayer(gp);
 		}
 		
+		if(GlobalChatConfiguration.config.getBoolean("removeMutesOnServerRestart")) {
+			LuckPermsManager.removeAllMuteNodes();
+		}
+		
 	}
 
 	@EventHandler

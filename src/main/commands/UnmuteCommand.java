@@ -41,27 +41,21 @@ public class UnmuteCommand extends Command {
 			return;
 		}
 		
-		GPlayer tempUnmutedPlayerData = null;
-		
-		for(GPlayer pdd : Main.gPlayers) {
-			if(pdd.getProxiedPlayer().getName().equals(playerName)) {
-				tempUnmutedPlayerData = pdd;
-			}
-		}
-		
-		final GPlayer unmutedPlayerData = tempUnmutedPlayerData;
+		ProxiedPlayer pp2 = ProxyServer.getInstance().getPlayer(playerName);
+		GPlayer unmutedPlayerData = Main.getPlayerData(pp2);
 		
 		if(unmutedPlayerData.isMuted()) {
 	
 			unmutedPlayerData.setMuted(false);
+			MuteCommand.mutedPlayersUUIDs.remove(unmutedPlayerData.getProxiedPlayer().getUniqueId());
 
-			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "Player was unsilenced. His messages will be shown now."));
+			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE + ChatColor.GRAY + "Player was unmuted. His messages will be shown."));
 			unmutedPlayerData.getProxiedPlayer().sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.SILENCE +
-					ChatColor.GRAY + "You have been unsilenced. Your messages will be shown now."));
+					ChatColor.GRAY + "You are unsilenced. Your messages will be shown now."));
 			
 			Main.logMessage("[Mute] User "+pp.getName()+ " unmuted user "+playerName);
 		}else {
-			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.WARNING + ChatColor.RED + "Player is not silenced!. For silence, please use - /mute <nick>"));
+			pp.sendMessage(TextComponent.fromLegacyText(ChatPrefabrics.WARNING + ChatColor.RED + "Player is not silenced. Please use - /mute <nick>"));
 		}
 	}
 }

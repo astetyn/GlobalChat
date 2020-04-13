@@ -1,5 +1,5 @@
 name: GlobalChat
 main: main.Main
 author: astetyne
-depend: [LuckPerms]
-version: 3.0.3
+depends: [LuckPerms]
+version: 3.0.4
