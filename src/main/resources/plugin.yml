@@ -1,5 +1,6 @@
-name: GlobalChat
-main: main.me.astetyne.Main
+name: ${project.name}
+main: me.astetyne.Main
 author: astetyne
 depends: [LuckPerms]
-version: 3.0.4
+version: ${project.version}
+description: ${project.description}
