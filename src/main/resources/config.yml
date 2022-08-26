@@ -1,0 +1,37 @@
+#Show GlobalChat version me.astetyne.message on login.
+showVersionMessage: true
+
+#Show me.astetyne.message when player joins or leaves.
+showJoinLeaveMessage: true
+
+#This is the prefix in join/leave me.astetyne.message, your servers short name can be optimal
+joinLeaveMessagePrefix: "GCH"
+
+#If this is enabled, there will be small icon of first letter of server in front of every me.astetyne.message
+showServerIcon: true
+
+#Add space between prefix/suffix and name (this will have effect only if player has prefix/suffix)
+addExtraSpace: false
+
+#Use separate colors for prefix and nickname (if false, prefix last color will have effect on nickname)
+separateColors: false
+
+#This will remove all given mutes when server will restart. Enable this if you don't want to care about /unmute command.
+removeMutesOnServerRestart: false
+
+#Default color code for nicknames (this color will be default for all players without meta.globalchat.nickcolor.x)
+#No effect if separateColors is true and player has prefix
+defaultNicknameColor: "7"
+
+#Default color code for messages (this color will be default for all players without setcolor)
+defaultMessageColor: "7"
+
+#Default color code for arrow between name and me.astetyne.message
+defaultArrowColor: "7"
+
+#Time in seconds which player has to wait before next me.astetyne.message, can be overriden with globalchat.admin.nocheck
+waitSpamTime: 2
+
+#List of all bad word which will be filtered. If using diacritics, you must save file with UTF-8 encoding!
+badWords: ["fuck","anotherBadWord"]
+
